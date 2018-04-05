@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Graph Coloring</title>
+
+<script type="text/javascript" src="vis/dist/vis.js"></script>
+<script type="text/javascript" src="script.js"></script>
+
+<link href="vis/dist/vis.css" rel="stylesheet" type="text/css" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/css?family=Poppins:200,400,600,700,800,900" rel="stylesheet">
+  
+</head>
+<body>
+<div id="input">
+<h1 id="head1">
+  Generate a random graph.
+</h1>
+<span id="message"></span>
+<p>
+  <form onsubmit="draw(); return false;">
+  <label for="nodeCount">Enter number of nodes:</label><br/>
+  <div id="container">
+  	<input id="nodeCount" type="text" value="25" style="width: 50px;">
+  	<input type="button" value="Go" onclick="draw()">
+  </div>
+</form>
+</p>
+<form onsubmit="timer(); return false;" id="colorForm">
+  <div id="container">
+  	<label for="colorButton">Color it!</label>
+  	<input id="colorButton" type="button" value="Go" onclick="timer()">
+  </div>
+</form>
+<p id="colorsUsed"></p><br/>
+<p id="time"></p>
+</div>
+<div id="mynetwork"></div>
+</body>
+</html>
+
