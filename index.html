@@ -17,8 +17,15 @@
   Generate a random graph.
 </h1>
 <span id="message"></span>
-<p>
   <form onsubmit="draw(); return false;">
+  <label for="nodeCount">Choose number of edges:</label>
+  <div class="container">
+  <input type="range" min="0" max="100" value="50" class="edgeSlider" id="edgeRange">
+</div>
+<div id="container" class="noMargin">
+	<p class="left">Bipartite</p>
+	<p class="right">Complete</p>
+</div>
   <label for="nodeCount">Enter number of nodes:</label><br/>
   <div id="container">
   	<input id="nodeCount" type="text" value="25" style="width: 50px;">

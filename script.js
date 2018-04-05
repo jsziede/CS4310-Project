@@ -66,6 +66,7 @@ function loadJSON(path, success, error) {
 
 function getScaleFreeNetwork(nodeCount) {
 	adjList = [maxNodes];
+	var edgeFreq = document.getElementById("edgeRange").value;
 	for (var i = 0; i < nodeCount; i++) {
 		var item = new LinkedList();
 		adjList[i] = item;
@@ -97,9 +98,8 @@ function getScaleFreeNetwork(nodeCount) {
 		} else if (i > 1) {
 			var connected = false;
 			for(var a = 0; a < i; a++) {
-				var rand1 = Math.random();
-				var rand2 = Math.random() + 0.1;
-				if(rand1 >= rand2) {
+				var rand1 = Math.random() * 100;
+				if(rand1 < edgeFreq) {
 					edges.push({
 					from: i,
 					to: a
@@ -168,6 +168,9 @@ function destroy() {
 		var msg = document.getElementById("colorsUsed");
 		msg.style.display = "none";
 		msg.innerHTML = '';
+		var timediv = document.getElementById("time");
+		time.innerHTML = '';
+		time.style.display = "none";
 	}
 }
 
@@ -269,7 +272,6 @@ function colorNodes() {
 		node = nodes.get(i.toString());
 		var current = adjList[i].head;
 		var colorFound = true;
-		//var a = 0;
 		for(var b = 0; b < colorList.length; b++) {
 			current = adjList[i].head;
 			if(colorFound == false) {
