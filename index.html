@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8"></meta>
 <title>Graph Coloring</title>
 
 <script type="text/javascript" src="vis/dist/vis.js"></script>
@@ -13,34 +14,33 @@
 </head>
 <body>
 <div id="input">
-<h1 id="head1">
-  Generate a random graph.
-</h1>
-<span id="message"></span>
-  <form onsubmit="draw(); return false;">
-  <label for="nodeCount">Choose number of edges:</label>
-  <div class="container">
-  <input type="range" min="0" max="100" value="50" class="edgeSlider" id="edgeRange">
-</div>
-<div id="container" class="noMargin">
-	<p class="left">Bipartite</p>
-	<p class="right">Complete</p>
-</div>
-  <label for="nodeCount">Enter number of nodes:</label><br/>
-  <div id="container">
-  	<input id="nodeCount" type="text" value="25" style="width: 50px;">
-  	<input type="button" value="Go" onclick="draw()">
-  </div>
-</form>
-</p>
-<form onsubmit="timer(); return false;" id="colorForm">
-  <div id="container">
-  	<label for="colorButton">Color it!</label>
-  	<input id="colorButton" type="button" value="Go" onclick="timer()">
-  </div>
-</form>
-<p id="colorsUsed"></p><br/>
-<p id="time"></p>
+	<h1 id="head1">
+		Generate a random graph.
+	</h1>
+	<form onsubmit="draw(); return false;">
+		<label for="nodeCount">Choose frequency of edges:</label>
+		<div class="container">
+			<input type="range" min="0" max="100" value="50" class="edgeSlider" id="edgeRange">
+		</div>
+		<div id="container" class="noMargin">
+			<p class="left">Bipartite</p>
+			<p class="right">Complete</p>
+		</div>
+		<label for="nodeCount">Enter number of nodes:</label><br/>
+		<div id="container">
+			<input id="nodeCount" type="text" value="25" style="width: 50px;">
+			<input type="button" value="Go" onclick="draw()">
+		</div>
+	</form>
+	<form onsubmit="timer(); return false;" id="colorForm">
+		<div id="container">
+			<label for="colorButton">Color it!</label>
+			<input id="colorButton" type="button" value="Go" onclick="timer()">
+		</div>
+	</form>
+	<p id="colorsUsed"></p><br/>
+	<p id="time"></p>
+	<div id="colorOutput"></div>
 </div>
 <div id="mynetwork"></div>
 </body>

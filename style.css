@@ -1,9 +1,13 @@
+/* pseudos --------------------------------- */
+
 ::selection {
   background: #dd9a84;
 }
 ::-moz-selection {
   background: #dd9a84;
 }
+
+/* elements --------------------------------- */
 
 body {
 	font: 10pt sans;
@@ -15,11 +19,57 @@ body {
 	flex-direction: row;
 }
 
-#mynetwork {
-	width: 100%;
-	height: 100%;
+p {
 	margin: 0;
-	padding: 0;
+}
+
+/* ids --------------------------------- */
+
+#colorContainer {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+}
+
+#colorForm {
+	display: none;
+}
+
+#colorOutput {
+	display: none;
+	background: #f2df81;
+	width: 100%;
+}
+
+#colorsUsed {
+	display: none;
+	width: 100%;
+}
+
+#container {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	justify-content: center;
+  	align-items: center;
+  	margin: 15px 0;
+}
+
+#container input {
+	background: #f2df81;
+	border: solid 4px #4b3029;
+	padding: 10px;
+	font-family: 'Poppins', sans-serif;
+	font-weight: 600;
+	font-size: 1em;
+	color: #4b3029;
+	min-width: 0;
+	min-height: 0;
+}
+
+#container label {
+	flex: 1;
+	line-height: 100%;
 }
 
 #input {
@@ -40,7 +90,7 @@ body {
 #input h1 {
 	font-weight: 700;
 	font-size: 1.5em;
-	margin: 0;
+	margin: 0 0 15px 0;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -56,75 +106,11 @@ body {
 	margin: 30px auto;
 }
 
-#container {
-	display: flex;
+#mynetwork {
 	width: 100%;
-	flex-direction: row;
-	justify-content: center;
-  	align-items: center;
-  	margin: 15px 0;
-}
-
-#container input {
-	background: #f2df81;
-	border: solid 4px #4b3029;
-	padding: 10px;
-	font-family: 'Poppins', sans-serif;
-	font-weight: 600;
-	font-size: 1em;
-	color: #4b3029;
-}
-
-.edgeSlider {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 25px;
-    background: #f2df81;
-    border: solid 4px #4b3029;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-    box-sizing: border-box;
-}
-
-.edgeSlider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 17px;
-    height: 17px;
-    background: #d07d62;
-    cursor: pointer;
-}
-
-.edgeSlider::-moz-range-thumb {
-    width: 17px;
-    height: 17px;
-    background: #4CAF50;
-    cursor: pointer;
-}
-
-.noMargin {
-	margin: 0px !important;
-	padding: 0px;
-}
-
-.left {
-	text-align: left;
-	font-size: 0.4em;
-	width: 50%;
-}
-
-.right {
-	text-align: right;
-	font-size: 0.4em;
-	width: 50%;
-}
-
-#container label {
-	flex: 1;
-	line-height: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 #nodeCount {
@@ -133,26 +119,80 @@ body {
 	flex: 1;
 }
 
-#message {
-	color: red;
-	max-width:600px;
-	font-size:16px;
-	cursor:pointer;
-	text-decoration: underline;
-}
-
-#colorsUsed {
-	display: none;
-}
-
-#colorForm {
-	display: none;
-}
-
 #time {
 	display: none;
 }
 
-p {
-	margin: 0;
+/* classes --------------------------------- */
+
+.edgeSlider {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 100%;
+    height: 25px;
+    background: #f2df81;
+    border: solid 4px #4b3029;
+    outline: none;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.edgeSlider::-moz-range-thumb {
+    appearance: none !important;
+    -moz-appearance: none !important;
+    width: 17px;
+    height: 17px;
+    background: #d07d62;
+    cursor: pointer;
+    border: none;
+}
+
+.edgeSlider::-moz-range-track {
+	background-color: #f2df81;
+}
+
+.edgeSlider::-webkit-slider-thumb {
+	-webkit-appearance: none !important;
+	appearance: none !important;
+	width: 17px;
+	height: 17px;
+	background: #d07d62;
+	cursor: pointer;
+}
+
+.left {
+	text-align: left;
+	font-size: 0.4em;
+	width: 50%;
+}
+
+.noMargin {
+	margin: 0px !important;
+	padding: 0px;
+}
+
+.outputRight {
+	flex: 1;
+	color: #ffffff;
+	text-shadow: 1px 1px 16px rgba(0, 0, 0, 1);
+	text-align: center;
+	font-size: 0.8em;
+	justify-content: center;
+  	align-items: center;
+}
+
+.outputLeft {
+	width: 20%;
+	color: #ffffff;
+	text-align: center;
+	font-size: 0.8em;
+	text-shadow: 1px 1px 16px rgba(0, 0, 0, 1);
+	justify-content: center;
+  	align-items: center;
+}
+
+.right {
+	text-align: right;
+	font-size: 0.4em;
+	width: 50%;
 }
