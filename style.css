@@ -91,12 +91,6 @@ p {
 	font-weight: 700;
 	font-size: 1.5em;
 	margin: 0 0 15px 0;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 	min-height: 200px;
 }
 
@@ -121,6 +115,27 @@ p {
 
 #time {
 	display: none;
+}
+
+#toggle {
+    width: 88px;
+    height: 28px;
+    border: solid 4px #4b3029;
+    background: #f2df81;
+    overflow: hidden;
+}
+
+#toggle-container {
+    font-size: 0.5em;
+    margin: 0 15px;
+}
+
+#toggle-slider {
+    width: 44px;
+    height: 28px;
+    background: #aaaaaa;
+    -webkit-transition: left 0.3s;
+    transition: left 0.3s;
 }
 
 /* classes --------------------------------- */
