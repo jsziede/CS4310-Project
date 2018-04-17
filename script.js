@@ -104,6 +104,7 @@ function buildGraph(nodeCount) {
 	adjList = [maxNodes];
 	//gets the value from the slider to determine how frequent an edge should appear
 	var edgeFreq = document.getElementById("edgeRange").value;
+    
     var toggle = document.getElementById("toggle-container");
     //determines the type of generated graph
     if (edgeFreq === "100") {
@@ -285,7 +286,7 @@ function colorNodes() {
     
     //colors the first node
 	node.color.background = colorList[0].color;
-	//nodes.update(node);
+	nodes.update(node);
     
     //for each node in the graph excluding the first node that was colored
     var i;
@@ -362,7 +363,7 @@ function colorNodes() {
 			node.color.background = colorList[b - 1].color;
 			colorList[b - 1].freq += 1;
 		}
-		//nodes.update(node);
+		nodes.update(node);
 	}
 	return colorList.length;
 }
@@ -381,12 +382,12 @@ function colorCompleteNodes() {
         }
         hexString = "#" + hexString;
         colorList[i] = new ColorNode(hexString);
-        colorList[i].freq = 1;
+        colorList[i].freq += 1;
         var node = nodes.get(i.toString());
         node.color.background = colorList[i].color;
-        colorList[i].freq += 1;
-        //nodes.update(node);
+        nodes.update(node);
     }
+    return colorList.length;
 }
 
 /* O(n) function to color all nodes in the graph one of two colors.
@@ -438,6 +439,7 @@ function colorBipartiteNodes() {
             nodes.update(node);
         }
     }
+    return colorList.length;
 }
 
 //times the coloring function as well as outputting the data from the coloring algorithm
@@ -478,9 +480,9 @@ function timer() {
 	timep.style.display = "block";
 	
 	//trims the calculated time to four decimal places
-	var trimmedStop = (stop / 1000).toFixed(4);
+	var trimmedStop = stop.toFixed(4);
 	
-	timep.innerHTML = "Time elapsed: " + trimmedStop + "s";
+	timep.innerHTML = "Time elapsed: " + trimmedStop + "ms";
 	output.style.display = "block";
 	
 	//prints the list of colors used
