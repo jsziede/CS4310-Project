@@ -258,8 +258,8 @@ function draw() {
 /*given a random graph, colors all nodes so no adjacent nodes have the same color
 while attempting to use the least amount of colors as possible.
 
-this function runs in O(v^2 * e),
-where v is the amount of nodes and e is the amount of edges */
+this function runs in O(n^2 * e),
+where n is the amount of nodes and e is the amount of edges */
 function colorNodes() {
     //gets a random hexadecimal color
 	var rand = Math.floor(Math.random() * 16777216);
@@ -279,8 +279,10 @@ function colorNodes() {
     var node;
     //if welsh-powell algorithm is enabled
     if (welsh_powell) {
+        //gets node with the most edges
         node = nodes.get(connectionCount[0].node.toString());
     } else {
+        //gets the node with the first id
         node = nodes.get("0");
     }
     
@@ -313,7 +315,8 @@ function colorNodes() {
             } else {
                 connectionList = adjList[i].head;
             }
-            //exit loop if a color in the list was not adjacent to the ith node
+            //exit loop if a color in the list was not adjacent to the ith node.
+            //this would only be true if it was set to true at the end of the previous loop.
 			if (colorFound === false) {
 				break;
 			}
