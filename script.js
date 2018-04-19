@@ -29,6 +29,8 @@ var graphOptions = {
 //stores graph data
 var network = null;
 
+var totaledges = 0;
+
 //the number of nodes requested by the user
 var maxNodes = 0;
 
@@ -153,6 +155,7 @@ function buildGraph(nodeCount) {
 				from: from,
 				to: to
 			});
+            totaledges += 1;
 			connectionCount[from].amount += 1;
 			connectionCount[to].amount += 1;
 			adjList[from].add(to);
@@ -171,6 +174,7 @@ function buildGraph(nodeCount) {
                         from: i,
                         to: a
 					});
+                    totaledges += 1;
 					connectionCount[i].amount += 1;
 					connectionCount[a].amount += 1;
 					adjList[i].add(a);
@@ -187,6 +191,7 @@ function buildGraph(nodeCount) {
 					from: i,
 					to: randomNode
 				});
+                totaledges += 1;
 				connectionCount[i].amount += 1;
 				connectionCount[randomNode].amount += 1;
 				adjList[i].add(randomNode);
@@ -225,6 +230,7 @@ function destroy() {
         var output = document.getElementById("colorOutput");
         output.style.display = "none";
         output.innerHTML = '';
+        totaledges = 0;
 	}
 }
 
@@ -249,7 +255,7 @@ function draw() {
     var button = document.getElementById("colorForm");
 	button.style.display = "block";
 	button = document.getElementById("head1");
-	button.innerHTML = "Color the graph";
+	button.innerHTML = totaledges.toString();
 	var msg = document.getElementById("colorsUsed");
 	msg.style.display = "none";
 	msg.innerHTML = '';
@@ -288,7 +294,7 @@ function colorNodes() {
     
     //colors the first node
 	node.color.background = colorList[0].color;
-	nodes.update(node);
+	//nodes.update(node);
     
     //for each node in the graph excluding the first node that was colored
     var i;
@@ -366,7 +372,7 @@ function colorNodes() {
 			node.color.background = colorList[b - 1].color;
 			colorList[b - 1].freq += 1;
 		}
-		nodes.update(node);
+		//nodes.update(node);
 	}
 	return colorList.length;
 }
