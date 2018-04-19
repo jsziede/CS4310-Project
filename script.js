@@ -294,7 +294,7 @@ function colorNodes() {
     
     //colors the first node
 	node.color.background = colorList[0].color;
-	//nodes.update(node);
+	nodes.update(node);
     
     //for each node in the graph excluding the first node that was colored
     var i;
@@ -372,7 +372,7 @@ function colorNodes() {
 			node.color.background = colorList[b - 1].color;
 			colorList[b - 1].freq += 1;
 		}
-		//nodes.update(node);
+		nodes.update(node);
 	}
 	return colorList.length;
 }
