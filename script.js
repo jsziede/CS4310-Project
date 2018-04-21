@@ -40,9 +40,6 @@ var nodes = new vis.DataSet(graphOptions);
 //array containing edge properties
 var edges = [];
 
-//counts the amount of connections per node
-var connectionCount = [];
-
 //stores the connections for each node as an array of linked lists
 var adjList = [];
 
@@ -77,8 +74,11 @@ function LLNode(data) {
 }
 	
 //basic linked list implementation
-function LinkedList() {
+function LinkedList(id) {
 	this.head = null;
+    this.id = id;
+    this.connections = 0;
+    this.connections = 0;
 	this.tail = null;
 
 	this.add = function (data) {
@@ -127,9 +127,8 @@ function buildGraph(nodeCount) {
     var i;
 	//creates a node for as many times as the user requested
 	for (i = 0; i < nodeCount; i += 1) {
-        connectionCount[i] = new EdgeData(i);
 		//create a new linked list to store in the adjacency list
-		var item = new LinkedList();
+		var item = new LinkedList(i.toString());
 		//the position in the adjacency list matches the graph node's id
 		adjList[i] = item;
 		//creates a graph node with default properties
@@ -144,7 +143,6 @@ function buildGraph(nodeCount) {
 				}
 			}
 		});
-		connectionCount[i].amount = 0;
 
 		//if second graph node to be created
 		if (i === 1) {
@@ -156,8 +154,8 @@ function buildGraph(nodeCount) {
 				to: to
 			});
             totaledges += 1;
-			connectionCount[from].amount += 1;
-			connectionCount[to].amount += 1;
+			adjList[from].connections += 1;
+			adjList[to].connections += 1;
 			adjList[from].add(to);
             adjList[to].add(from);
 		} else if (i > 1) { //else if any graph node created after the second node
@@ -175,8 +173,8 @@ function buildGraph(nodeCount) {
                         to: a
 					});
                     totaledges += 1;
-					connectionCount[i].amount += 1;
-					connectionCount[a].amount += 1;
+					adjList[i].connections += 1;
+                    adjList[a].connections += 1;
 					adjList[i].add(a);
                     adjList[a].add(i);
 					connected = true;
@@ -192,8 +190,8 @@ function buildGraph(nodeCount) {
 					to: randomNode
 				});
                 totaledges += 1;
-				connectionCount[i].amount += 1;
-				connectionCount[randomNode].amount += 1;
+				adjList[i].connections += 1;
+                adjList[randomNode].connections += 1;
 				adjList[i].add(randomNode);
                 adjList[randomNode].add(i);
 				connected = true;
@@ -201,7 +199,7 @@ function buildGraph(nodeCount) {
 		}
 	}
     
-    connectionCount.sort(function (a, b) {return b.amount - a.amount; });
+    //connectionCount.sort(function (a, b) {return b.amount - a.amount; });
     
 	//return the set of nodes and edges
 	return {nodes: nodes, edges: edges};
@@ -214,7 +212,6 @@ function destroy() {
         network = null;
         nodes = new vis.DataSet(graphOptions);
         edges = [];
-        connectionCount = [];
         colorList = [];
         adjList = null;
         var button = document.getElementById("colorForm");
@@ -266,7 +263,7 @@ while attempting to use the least amount of colors as possible.
 
 this function runs in O(n^2 * e),
 where n is the amount of nodes and e is the amount of edges */
-function colorNodes() {
+function greedyColoring(graph) {
     //gets a random hexadecimal color
 	var rand = Math.floor(Math.random() * 16777216);
 	var hexString = rand.toString(16);
@@ -283,14 +280,8 @@ function colorNodes() {
     
     //the current node to color
     var node;
-    //if welsh-powell algorithm is enabled
-    if (welsh_powell) {
-        //gets node with the most edges
-        node = nodes.get(connectionCount[0].node.toString());
-    } else {
-        //gets the node with the first id
-        node = nodes.get("0");
-    }
+    //gets the node with the first id
+    node = nodes.get("0");
     
     //colors the first node
 	node.color.background = colorList[0].color;
@@ -300,11 +291,7 @@ function colorNodes() {
     var i;
 	for (i = 1; i < maxNodes; i += 1) {
         //get the ith node
-		if (welsh_powell) {
-            node = nodes.get(connectionCount[i].node.toString());
-        } else {
-            node = nodes.get(i.toString());
-        }
+		node = nodes.get(graph[i].id.toString());
         
         //gets the list of nodes connected to the ith node
 		var connectionList;
@@ -316,11 +303,114 @@ function colorNodes() {
         //for all colors in the list
 		for (b = 0; b < colorList.length; b += 1) {
             //gets the list of nodes connected to the ith node
-            if (welsh_powell) {
-                connectionList = adjList[connectionCount[i].node].head;
-            } else {
-                connectionList = adjList[i].head;
-            }
+            connectionList = graph[i].head;
+            
+            //exit loop if a color in the list was not adjacent to the ith node.
+            //this would only be true if it was set to true at the end of the previous loop.
+			if (colorFound === false) {
+				break;
+			}
+            
+            //set color to false now so the above loop wasnt called
+			colorFound = false;
+            
+            //base case
+			var bc = false;
+            //while there is a node connected to node i that hasnt been checked for its color
+			while (!bc) {
+                //gets the first node in the list that is connected to the ith node
+				var connectNode = nodes.get(connectionList.connect);
+                /* if the first node connected to the ith
+                node has the current color in the color list */
+				if (connectNode.color.background === colorList[b].color) {
+                    //exit loop and move to next color in the list
+					colorFound = true;
+					bc = true;
+				}
+                //if there are no more nodes connected to the ith node, exit loop
+				if (connectionList.next === null) {
+					bc = true;
+				} else { //else move to the next node connected to the ith node
+					connectionList = connectionList.next;
+				}
+			}
+		}
+        //if there is a node adjacent to the ith node that has each color in the color list
+		if (colorFound === true) {
+            //the ith node must have a new and unused color
+			rand = Math.floor(Math.random() * 16777216);
+			hexString = rand.toString(16);
+			if (hexString.length < 6) {
+				while (hexString.length < 6) {
+					hexString = "0" + hexString;
+				}
+			}
+			hexString = "#" + hexString;
+			var x = colorList.length;
+			colorList[x] = new ColorNode(hexString);
+			colorList[x].freq = 1;
+			node.color.background = colorList[x].color;
+			//need to add a check if the random color already exists in the array
+		} else { /* else we have found a color in the color list that was not used by any
+                 nodes adjacent to the ith node */
+			node.color.background = colorList[b - 1].color;
+			colorList[b - 1].freq += 1;
+		}
+		nodes.update(node);
+	}
+	return colorList.length;
+}
+
+/*given a random graph, colors all nodes so no adjacent nodes have the same color
+while attempting to use the least amount of colors as possible.
+
+this function runs in O(n^2 * e),
+where n is the amount of nodes and e is the amount of edges */
+function wpColoring(graph) {
+    //gets a random hexadecimal color
+	var rand = Math.floor(Math.random() * 16777216);
+	var hexString = rand.toString(16);
+	if (hexString.length < 6) {
+		while (hexString.length < 6) {
+			hexString = "0" + hexString;
+		}
+	}
+	hexString = "#" + hexString;
+    
+    //stores the random color into the color list
+	colorList[0] = new ColorNode(hexString);
+	colorList[0].freq = 1;
+    
+    var graphCopy = graph.slice(0);
+    graphCopy.sort(function (a, b) {return b.connections - a.connections; });
+    
+    //the current node to color
+    var node;
+    //gets node with the most edges
+    node = nodes.get(graphCopy[0].id.toString());
+    
+    //colors the first node
+	node.color.background = colorList[0].color;
+	nodes.update(node);
+    
+    //for each node in the graph excluding the first node that was colored
+    var i;
+	for (i = 1; i < maxNodes; i += 1) {
+        //get the ith node
+		node = nodes.get(graphCopy[i].id.toString());
+        
+        //gets the list of nodes connected to the ith node
+		var connectionList;
+        
+        //assume that the first color in the list is taken by a node adjacent to node i
+		var colorFound = true;
+        
+        var b;
+        //for all colors in the list
+		for (b = 0; b < colorList.length; b += 1) {
+            //gets the list of nodes connected to the ith node
+            connectionList = graphCopy[i].head;
+            
             //exit loop if a color in the list was not adjacent to the ith node.
             //this would only be true if it was set to true at the end of the previous loop.
 			if (colorFound === false) {
@@ -379,7 +469,7 @@ function colorNodes() {
 
 /* O(n) function to color all nodes in the graph a different color.
 If we know the graph is complete, then we know each node will need its own color. */
-function colorCompleteNodes() {
+function colorCompleteNodes(graph) {
     var i;
     for (i = 0; i < maxNodes; i += 1) {
         var rand = Math.floor(Math.random() * 16777216);
@@ -392,7 +482,7 @@ function colorCompleteNodes() {
         hexString = "#" + hexString;
         colorList[i] = new ColorNode(hexString);
         colorList[i].freq += 1;
-        var node = nodes.get(i.toString());
+        var node = nodes.get(graph[i].id.toString());
         node.color.background = colorList[i].color;
         nodes.update(node);
     }
@@ -401,7 +491,7 @@ function colorCompleteNodes() {
 
 /* O(n) function to color all nodes in the graph one of two colors.
 If we know the graph is bipartite, we know it will only need two colors. */
-function colorBipartiteNodes() {
+function colorBipartiteNodes(graph) {
     var rand1 = Math.floor(Math.random() * 16777216);
     var rand2 = Math.floor(Math.random() * 16777216);
     
@@ -436,8 +526,8 @@ function colorBipartiteNodes() {
     
     var i;
     for (i = 1; i < maxNodes; i += 1) {
-        node = nodes.get(i.toString());
-        var connectedTo = nodes.get(adjList[i].head.connect.toString());
+        node = nodes.get(graph[i].id.toString());
+        var connectedTo = nodes.get(graph[i].head.connect.toString());
         if (connectedTo.color.background === colorList[0].color) {
             node.color.background = colorList[1].color;
             colorList[1].freq += 1;
@@ -468,11 +558,16 @@ function timer() {
 	var start = performance.now();
 	//calls the graph coloring algorithm
     if (graphType === 2) {
-        length = colorCompleteNodes();
+        length = colorCompleteNodes(adjList);
     } else if (graphType === 1) {
-        length = colorBipartiteNodes();
+        length = colorBipartiteNodes(adjList);
     } else {
-        length = colorNodes();
+        //if welsh-powell algorithm is enabled
+        if (welsh_powell) {
+            length = wpColoring(adjList);
+        } else {
+            length = greedyColoring(adjList);
+        }
     }
 	//gets the time after the algorithm has finished
 	var stop = performance.now();
