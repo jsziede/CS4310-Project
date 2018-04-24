@@ -78,7 +78,6 @@ function LinkedList(id) {
 	this.head = null;
     this.id = id;
     this.connections = 0;
-    this.connections = 0;
 	this.tail = null;
 
 	this.add = function (data) {
